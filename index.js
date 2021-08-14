@@ -16,10 +16,10 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 //require routes
-const userApi = require('./routes/userAPI')
-app.use('',userApi);
-const todoApi = require('./routes/todoAPI')
-app.use('',todoApi)
+const userApi = require('./routes/userAPI');
+const todoApi = require('./routes/todoAPI');
+app.use('/api/v1',userApi);
+app.use('/api/v1',todoApi);
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
