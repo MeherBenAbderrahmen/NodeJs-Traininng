@@ -5,7 +5,8 @@ const userSchema = new Schema({
   lastName: String,
   age: Number,
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  todos: [{type: Schema.Types.ObjectId, ref:'todo'}]
 },{
   versionKey:false,
   timestamps: true
