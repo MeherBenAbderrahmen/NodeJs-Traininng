@@ -60,11 +60,11 @@ router.post('/html-mail', async (req, res) => {
 router.post('/html-mail/v2', async (req, res) => {
   try {
     //1. read template path
-    const templatePath=path.resolve('./mail_templates','notification.v1.html');
+    const templatePath = path.resolve('./mail_templates', 'notification.v1.html');
     //2. read template content
-    const content=fs.readFileSync(templatePath, {encoding: 'utf-8'});
+    const content = fs.readFileSync(templatePath, { encoding: 'utf-8' });
 
- 
+
     const mailData = {
       from: 'iscae_meher@live.com',
       to: 'iscae_meher@live.com',
@@ -86,18 +86,18 @@ router.post('/html-mail/v2', async (req, res) => {
 router.post('/html-mail/v3/:name', async (req, res) => {
   try {
     //1. read template path
-    const templatePath=path.resolve('./mail_templates','notification.v2.ejs');
+    const templatePath = path.resolve('./mail_templates', 'notification.v2.ejs');
     //2. read template content
-    const content=fs.readFileSync(templatePath, {encoding: 'utf-8'});
+    const content = fs.readFileSync(templatePath, { encoding: 'utf-8' });
     //3. rendering template
-    
-    const name=req.params.name;
- 
+
+    const name = req.params.name;
+
     const mailData = {
       from: 'iscae_meher@live.com',
       to: 'iscae_meher@live.com',
       subject: 'subject',
-      html:ejs.render(content,{name}),
+      html: ejs.render(content, { name }),
     };
 
     const info = await transporter.sendMail(mailData);
@@ -110,8 +110,15 @@ router.post('/html-mail/v3/:name', async (req, res) => {
 });
 
 router.post('/cron', async (req, res) => {
-  cron.schedule('*/2 * * * *', () => {
-    console.log('running a task every two minutes');
-  })
+  try {
+    cron.schedule('*/2 * * * *', () => {
+      console.log('running a task every two minutes');
+    })
+    res.send({ message: 'task started evry 2 min' })
+  }
+  catch {
+    console.log(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 module.exports = router;
