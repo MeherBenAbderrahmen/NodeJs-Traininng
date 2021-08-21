@@ -5,6 +5,7 @@ const email = require('../models/sendEmailSchema');
 const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
+const cron = require('node-cron');
 const transporter = nodemailer.createTransport({
   port: 587,
   host: "smtp-mail.outlook.com",
@@ -106,5 +107,11 @@ router.post('/html-mail/v3/:name', async (req, res) => {
     console.log(err);
     res.status(500).json({ message: 'Internal server error' });
   }
+});
+
+router.post('/cron', async (req, res) => {
+  cron.schedule('*/2 * * * *', () => {
+    console.log('running a task every two minutes');
+  })
 });
 module.exports = router;
