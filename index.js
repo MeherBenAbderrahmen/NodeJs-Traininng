@@ -20,9 +20,11 @@ app.get('/', (req, res) => {
 const userApi = require('./routes/userAPI');
 const todoApi = require('./routes/todoAPI');
 const emailApi = require('./routes/sendEmailSchemaAPI');
+const uploadApi = require('./routes/uploadAPI');
 app.use('/api/v1',userApi);
 app.use('/api/v1',todoApi);
 app.use('/api/v1',emailApi);
+app.use('/api/v1',uploadApi);
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })

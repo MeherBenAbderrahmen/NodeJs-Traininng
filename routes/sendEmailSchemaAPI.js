@@ -116,7 +116,7 @@ router.post('/cron', async (req, res) => {
     })
     res.send({ message: 'task started evry 2 min' })
   }
-  catch {
+  catch (err){
     console.log(err);
     res.status(500).json({ message: 'Internal server error' });
   }
