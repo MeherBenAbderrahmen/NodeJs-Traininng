@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
-const email = require('../models/sendEmailSchema')
-
+const email = require('../models/sendEmailSchema');
+const path = require('path');
+const fs = require('fs');
 const transporter = nodemailer.createTransport({
   port: 587,
   host: "smtp-mail.outlook.com",
@@ -56,7 +57,12 @@ router.post('/html-mail', async (req, res) => {
 //without mongodb
 router.post('/html-mail/v2', async (req, res) => {
   try {
-    const { to, subject, text } = req.body;
+    //1. read template path
+    const templatePath=path.resolve('./mail_templates','notification.v1.html');
+    //2. read template content
+    const content=fs.readFileSync(templatePath, {encoding: 'utf-8'});
+
+ 
     const mailData = {
       from: 'iscae_meher@live.com',
       to: 'iscae_meher@live.com',
