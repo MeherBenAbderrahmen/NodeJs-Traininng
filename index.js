@@ -12,6 +12,8 @@ const User = require('./models/userSchema')
 app.use(morgan('dev'))
 //config body parse
 app.use(express.json())
+//resolve static files
+app.use('/uploads', express.static('upload'));
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
