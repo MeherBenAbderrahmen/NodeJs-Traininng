@@ -20,7 +20,7 @@ cb(null, allowedExtension.includes(fileExtension));
 }
 const maxSize = 1*1024*1024;
 const upload = multer({ storage: myStorage, fileFilter: fileFilterFunction, limits: {fileSize: maxSize}});
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', upload.single('file'),  (req, res) => {
     if ((req.file) !== undefined) {
         res.send({ message: 'file uploaded ' })
     } else {
