@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const email = require('../models/sendEmailSchema');
 const path = require('path');
 const fs = require('fs');
+const ejs = require('ejs');
 const transporter = nodemailer.createTransport({
   port: 587,
   host: "smtp-mail.outlook.com",
@@ -67,7 +68,35 @@ router.post('/html-mail/v2', async (req, res) => {
       from: 'iscae_meher@live.com',
       to: 'iscae_meher@live.com',
       subject: 'subject',
-      html: '<b>Hey there! </b><br> This is our first message sent with Nodemailer<br/>',
+      html: content,
+    };
+
+    const info = await transporter.sendMail(mailData);
+    res.send({ message: "Mail send", message_id: info.messageId });
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+//without mongodb 4eme methode
+router.post('/html-mail/v3/:name', async (req, res) => {
+  try {
+    //1. read template path
+    const templatePath=path.resolve('./mail_templates','notification.v2.ejs');
+    //2. read template content
+    const content=fs.readFileSync(templatePath, {encoding: 'utf-8'});
+    //3. rendering template
+    
+    const name=req.params.name;
+ 
+    const mailData = {
+      from: 'iscae_meher@live.com',
+      to: 'iscae_meher@live.com',
+      subject: 'subject',
+      html:ejs.render(content,{name}),
     };
 
     const info = await transporter.sendMail(mailData);
