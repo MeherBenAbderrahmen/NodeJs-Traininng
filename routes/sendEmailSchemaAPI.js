@@ -33,7 +33,7 @@ const transporter = nodemailer.createTransport({
   host: "smtp-mail.outlook.com",
   auth: {
       user: 'iscae_meher@live.com',
-      pass: '********',
+      pass: '*********',
   },
   secure: false, // upgrades later with STARTTLS -- change this based on the PORT
 });
