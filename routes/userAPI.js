@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/userSchema')
-
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 //get all user
 router.get('/users', async (req, res) => {
     //find all users
@@ -29,7 +30,15 @@ router.get('/users', async (req, res) => {
   router.post('/users', async (req, res) => {
     try {
       console.log(req.body);
-      const createdUser = await User.create(req.body)
+      const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
+      const createdUser = await User.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        age: req.body.age,
+        email: req.body.email,
+        
+        password: hashedPwd,
+    });
       res.json({ message: 'user add' });
     }
     catch (err) {
