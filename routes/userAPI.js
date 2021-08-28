@@ -26,26 +26,7 @@ router.get('/users', async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   })
-  // add one user
-  router.post('/users', async (req, res) => {
-    try {
-      console.log(req.body);
-      const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
-      const createdUser = await User.create({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        age: req.body.age,
-        email: req.body.email,
-        
-        password: hashedPwd,
-    });
-      res.json({ message: 'user add' });
-    }
-    catch (err) {
-      console.log(err);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  })
+  
   //update user by id
   router.put('/user/:id', async (req, res) => {
     try {
@@ -104,4 +85,28 @@ router.get('/users', async (req, res) => {
     }
   })
 
+
+
+  router.post("/login2", async (req, res) => {
+    try {
+      const user = await User.findOne({ firstName: req.body.firstName });
+    console.log(user);
+    console.log(req.body.password);
+    console.log(user.password);
+      if (user) {
+        const cmp = await bcrypt.compare(req.body.password, user.password);
+        if (cmp) {
+          //   ..... further code to maintain authentication like jwt or sessions
+          res.send("Auth Successful");
+        } else {
+          res.send("Wrong username or password.");
+        }
+      } else {
+        res.send("Wrong username or password.");
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Internal Server error Occured");
+    }
+  });
 module.exports = router;
