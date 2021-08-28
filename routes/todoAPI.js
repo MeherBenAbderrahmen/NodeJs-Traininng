@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const ToDo = require('../models/todoSchema')
+const passport = require('passport')
+const User = require('../models/userSchema');
 
 //get all todo
-router.get('/todos', async (req, res) => {
+router.get('/todos',passport.authenticate('bearer', { session: false }), async (req, res) => {
     //find all users
     try {
       const allTodo = await ToDo.find({});
@@ -38,10 +40,12 @@ router.get('/todos', async (req, res) => {
     }
   })
   //update todo by id
-  router.put('/todos/:id', async (req, res) => {
+  router.put('/todos/:id',passport.authenticate('bearer', { session: false }), async (req, res) => {
     try {
+      //affect todo to connected user
       const updatedTodo = await ToDo.findByIdAndUpdate(req.params.id, req.body, {new:true})
-      res.json(updatedTodo);
+      await User.findByIdAndUpdate(req.user._id, {$push :{todos : createTodo._id}}, {new:true})
+      
     }
     catch (err) {
       console.log(err);

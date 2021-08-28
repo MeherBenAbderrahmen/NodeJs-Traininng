@@ -5,6 +5,8 @@ const app = express()
 const port = 3000
 //data base connection
 require('./database/connect')
+//bearerStrategy with passport
+require('./passport/bearerStrategy')
 
 const User = require('./models/userSchema')
 
